@@ -1,6 +1,7 @@
 package ad.uda.moro.ejb.Exerciser;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Properties;
 import java.util.Scanner;
 
@@ -8,8 +9,8 @@ import javax.naming.*;
 
 import ad.uda.moro.ejb.entity.ActivitatDossier;
 import ad.uda.moro.ejb.session.EnquestesServiceRemote;
-
 import ad.uda.moro.CommonUtilities;
+import ad.uda.moro.MoroException;
 
 public class MinimumExerciser {
 
@@ -60,8 +61,8 @@ public class MinimumExerciser {
 		}
 	    
 		System.out.println("EXERCISER ENDS HERE");
-		
 		menu();
+		
 	}
 	
 	private void menu(){
@@ -71,18 +72,54 @@ public class MinimumExerciser {
 			System.out.println("|      MORO EXERCISER      |");
 			System.out.println("============================");
 			System.out.println("| Options:                 |");
+			System.out.println("| 0. Exit                  |");
 			System.out.println("| 1. CRUD ActivitatDossier |");
 			System.out.println("| 2. Llistats              |");
-			System.out.println("| 3. Exit                  |");
 			System.out.println("============================");
 			
 			Scanner scanner = new Scanner(System.in);
 		    choice = (int) scanner.nextInt();
 	
-			// Switch construct
 			switch (choice) {
+			case 0:
+				System.out.println("Exiting...");
+				break;
 			case 1:
-			  System.out.println("Option 1 selected");   // This is where I want to call the class
+			  crudActivitatDossier();
+			  break;
+			case 2:
+			  llistats();
+			  break;
+			default:
+			  System.out.println("Invalid selection");
+			  break;
+			}
+		}while (choice != 0);
+	}
+
+	private void crudActivitatDossier() {
+		int choice;
+		do{
+			System.out.println("============================");
+			System.out.println("|      MORO EXERCISER      |");
+			System.out.println("============================");
+			System.out.println("| CRUD activitatDossier:   |");
+			System.out.println("| 0. Exit                  |");
+			System.out.println("| 1. Inserir item          |");
+			System.out.println("| 2. Eliminar item         |");
+			System.out.println("| 3. Modificar item        |");
+			System.out.println("| 4. Llistar items         |");
+			System.out.println("============================");
+			
+			Scanner scanner = new Scanner(System.in);
+		    choice = (int) scanner.nextInt();
+	
+			switch (choice) {
+			case 0:
+				System.out.println("Exiting...");
+				break;
+			case 1:
+			  inserirActivitatDossier();
 			  break;
 			case 2:
 			  System.out.println("Option 2 selected");  // this is where I want to call the class
@@ -90,10 +127,81 @@ public class MinimumExerciser {
 			case 3:
 			  System.out.println("Exit selected");
 			  break;
+			case 4:
+				try {
+					ActivitatDossier[] a = this.enquestaService.getActivitatDossierList();
+					for(int i = 0; i < a.length; i++){
+						System.out.println(a[i].toString());
+					}
+				} catch (Exception ex) {
+					System.out.println("EJB access to getActivitatDossierList failed. Reason: " + ex.getMessage());
+				}
+				  break;
 			default:
 			  System.out.println("Invalid selection");
-			  break; // This break is not really necessary
+			  break; 
 			}
-		}while (choice != 3);
+		}while (choice != 0);
+	}
+	
+	private void inserirActivitatDossier(){
+		Scanner scanner = new Scanner(System.in);
+		
+		System.out.println("Entra el id:");
+	    int id = (int) scanner.nextInt();
+		
+		System.out.println("Entra el idDossier:");
+		int idDossier = (int) scanner.nextInt();
+		
+		System.out.println("Entra el idServei:");
+		int idServei = (int) scanner.nextInt();
+		
+		ActivitatDossier a = new ActivitatDossier(id, idDossier, idServei);
+		try {
+			this.enquestaService.addActivitatDossier(a);
+			a = this.enquestaService.getActivitatDossier(id);
+			if (a == null) {
+				System.out.println("ActivitatDossier with code [" + id + "] not found");
+			}
+			System.out.println("Establishment found. Details:" + a.toString());
+		} catch (MoroException ex) {
+			System.out.println("ERROR: " + ex.getMessage());
+		}
+	}
+	
+	private void llistats() {
+		int choice;
+		do{
+			System.out.println("============================");
+			System.out.println("|      MORO EXERCISER      |");
+			System.out.println("============================");
+			System.out.println("| Llistats:                |");
+			System.out.println("| 0. Exit                  |");
+			System.out.println("| 1. serveiDossier         |");
+			System.out.println("| 2. valoracioServei       |");
+			System.out.println("| 3. valoracioParametre    |");
+			System.out.println("============================");
+			
+			Scanner scanner = new Scanner(System.in);
+		    choice = (int) scanner.nextInt();
+	
+			switch (choice) {
+			case 0:
+				System.out.println("Exiting...");
+				break;
+			case 1:
+			  
+			  break;
+			case 2:
+			  
+			  break;
+			case 3:
+	
+			  break;
+			default:
+			  System.out.println("Invalid selection");
+			  break;
+			}
+		}while (choice != 0);
 	}
 }
