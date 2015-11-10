@@ -1,9 +1,12 @@
 package ad.uda.moro.ejb.Exerciser;
 
+import java.io.IOException;
 import java.util.Properties;
+import java.util.Scanner;
 
 import javax.naming.*;
 
+import ad.uda.moro.ejb.entity.ActivitatDossier;
 import ad.uda.moro.ejb.session.EnquestesServiceRemote;
 
 import ad.uda.moro.CommonUtilities;
@@ -45,17 +48,52 @@ public class MinimumExerciser {
 			System.out.println("Look up EnquestesServiceRemote ERROR. Details: " + ex.getMessage());
 		}
 		
-		//Test business method:
-		System.out.println("Trying business logic..");
+		
+		
+		// Test at least one business method to see if EJB access really works:
+		System.out.println("Trying out the business logic...");
 		try {
-			String test = this.enquestaService.helloWorld();
-			System.out.println("EnquestesServiceRemote.helloWorld() return: [" + test + "]");
-		} catch (Exception e) {
-			System.out.println("EJB access to EnquestesServiceRemoce failed. Details: " + e.getMessage());
+			ActivitatDossier a = this.enquestaService.getActivitatDossier(3);
+			System.out.println("getActivity(3)succeded:" + a.toString() + "])");
+		} catch (Exception ex) {
+			System.out.println("EJB access to EnquestesServiceRemote failed. Reason: " + ex.getMessage());
 		}
+	    
+		System.out.println("EXERCISER ENDS HERE");
 		
-		
-		System.out.println("EXERCISER ENDS HERE. Good Bye");
+		menu();
 	}
-
+	
+	private void menu(){
+		int choice;
+		do{
+			System.out.println("============================");
+			System.out.println("|      MORO EXERCISER      |");
+			System.out.println("============================");
+			System.out.println("| Options:                 |");
+			System.out.println("| 1. CRUD ActivitatDossier |");
+			System.out.println("| 2. Llistats              |");
+			System.out.println("| 3. Exit                  |");
+			System.out.println("============================");
+			
+			Scanner scanner = new Scanner(System.in);
+		    choice = (int) scanner.nextInt();
+	
+			// Switch construct
+			switch (choice) {
+			case 1:
+			  System.out.println("Option 1 selected");   // This is where I want to call the class
+			  break;
+			case 2:
+			  System.out.println("Option 2 selected");  // this is where I want to call the class
+			  break;
+			case 3:
+			  System.out.println("Exit selected");
+			  break;
+			default:
+			  System.out.println("Invalid selection");
+			  break; // This break is not really necessary
+			}
+		}while (choice != 3);
+	}
 }
