@@ -55,7 +55,7 @@ public class MinimumExerciser {
 		}
 		
 		
-		System.out.println("EXERCISER ENDS HERE");
+		System.out.println("EXERCISER ENDS HERE. Good Bye");
 	}
 
 }
