@@ -1,7 +1,5 @@
 package ad.uda.moro.ejb.Exerciser;
 
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Properties;
 import java.util.Scanner;
 
@@ -16,8 +14,12 @@ public class MinimumExerciser {
 
 	//Remoting context:
 	InitialContext initialContext = null;
+	
 	private static final String PKG_INTERFACES = "org.jboss.ejb.client.naming";
-	EnquestesServiceRemote enquestaService = null;
+	
+	private EnquestesServiceRemote enquestaService = null;
+	
+	private Scanner scanner;
 		
 		
 
@@ -77,7 +79,7 @@ public class MinimumExerciser {
 			System.out.println("| 2. Llistats              |");
 			System.out.println("============================");
 			
-			Scanner scanner = new Scanner(System.in);
+			scanner = new Scanner(System.in);
 		    choice = (int) scanner.nextInt();
 	
 			switch (choice) {
@@ -111,7 +113,7 @@ public class MinimumExerciser {
 			System.out.println("| 4. Llistar items         |");
 			System.out.println("============================");
 			
-			Scanner scanner = new Scanner(System.in);
+			scanner = new Scanner(System.in);
 		    choice = (int) scanner.nextInt();
 	
 			switch (choice) {
@@ -122,20 +124,13 @@ public class MinimumExerciser {
 			  inserirActivitatDossier();
 			  break;
 			case 2:
-			  System.out.println("Option 2 selected");  // this is where I want to call the class
+			  eliminarActivitatDossier();
 			  break;
 			case 3:
 			  System.out.println("Exit selected");
 			  break;
 			case 4:
-				try {
-					ActivitatDossier[] a = this.enquestaService.getActivitatDossierList();
-					for(int i = 0; i < a.length; i++){
-						System.out.println(a[i].toString());
-					}
-				} catch (Exception ex) {
-					System.out.println("EJB access to getActivitatDossierList failed. Reason: " + ex.getMessage());
-				}
+				llistatActivitatDossier();
 				  break;
 			default:
 			  System.out.println("Invalid selection");
@@ -145,7 +140,7 @@ public class MinimumExerciser {
 	}
 	
 	private void inserirActivitatDossier(){
-		Scanner scanner = new Scanner(System.in);
+		scanner = new Scanner(System.in);
 		
 		System.out.println("Entra el id:");
 	    int id = (int) scanner.nextInt();
@@ -163,9 +158,42 @@ public class MinimumExerciser {
 			if (a == null) {
 				System.out.println("ActivitatDossier with code [" + id + "] not found");
 			}
-			System.out.println("Establishment found. Details:" + a.toString());
+			System.out.println("ActivitatDossier found. Details:" + a.toString());
 		} catch (MoroException ex) {
 			System.out.println("ERROR: " + ex.getMessage());
+		}
+	}
+	
+	private void eliminarActivitatDossier(){
+		llistatActivitatDossier();
+		scanner = new Scanner(System.in);
+		
+		System.out.println("Entra el id del item que vols eliminar:");
+		int id = (int) scanner.nextInt();
+		
+		try {
+			ActivitatDossier a = enquestaService.getActivitatDossier(id);
+			if (a == null) {
+				System.out.println("ActivitatDossier with ID [" + id + "] not found");
+			}
+			enquestaService.deleteActivitatDossier(id);
+			System.out.println("ActivitatDossier with ID [" + id + "] deleted");
+		} catch (MoroException ex) {
+			System.out.println("ERROR: " + ex.getMessage());
+		}
+		
+		
+		
+	}
+	
+	private void llistatActivitatDossier(){
+		try {
+			ActivitatDossier[] a = this.enquestaService.getActivitatDossierList();
+			for(int i = 0; i < a.length; i++){
+				System.out.println(a[i].toString());
+			}
+		} catch (Exception ex) {
+			System.out.println("EJB access to getActivitatDossierList failed. Reason: " + ex.getMessage());
 		}
 	}
 	
@@ -177,12 +205,12 @@ public class MinimumExerciser {
 			System.out.println("============================");
 			System.out.println("| Llistats:                |");
 			System.out.println("| 0. Exit                  |");
-			System.out.println("| 1. serveiDossier         |");
-			System.out.println("| 2. valoracioServei       |");
-			System.out.println("| 3. valoracioParametre    |");
+			System.out.println("| 1. ServeiDossier         |");
+			System.out.println("| 2. ValoracioServei       |");
+			System.out.println("| 3. ValoracioParametre    |");
 			System.out.println("============================");
 			
-			Scanner scanner = new Scanner(System.in);
+			scanner = new Scanner(System.in);
 		    choice = (int) scanner.nextInt();
 	
 			switch (choice) {
