@@ -90,7 +90,7 @@ public class MinimumExerciser {
 			  crudActivitatDossier();
 			  break;
 			case 2:
-			  llistats();
+			  menuList();
 			  break;
 			default:
 			  System.out.println("Invalid selection");
@@ -121,16 +121,16 @@ public class MinimumExerciser {
 				System.out.println("Exiting...");
 				break;
 			case 1:
-			  inserirActivitatDossier();
+			  addActivitatDossier();
 			  break;
 			case 2:
-			  eliminarActivitatDossier();
+			  deleteActivitatDossier();
 			  break;
 			case 3:
-			  System.out.println("Exit selected");
+			  updateActivitatDossier();
 			  break;
 			case 4:
-				llistatActivitatDossier();
+				activitatDossierList();
 				  break;
 			default:
 			  System.out.println("Invalid selection");
@@ -139,7 +139,7 @@ public class MinimumExerciser {
 		}while (choice != 0);
 	}
 	
-	private void inserirActivitatDossier(){
+	private void addActivitatDossier(){
 		scanner = new Scanner(System.in);
 		
 		System.out.println("Entra el id:");
@@ -156,16 +156,16 @@ public class MinimumExerciser {
 			this.enquestaService.addActivitatDossier(a);
 			a = this.enquestaService.getActivitatDossier(id);
 			if (a == null) {
-				System.out.println("ActivitatDossier with code [" + id + "] not found");
+				System.out.println("ActivitatDossier with code [" + id + "] not added succesfully.");
 			}
-			System.out.println("ActivitatDossier found. Details:" + a.toString());
+			System.out.println("ActivitatDossier succesfully added. Details:" + a.toString());
 		} catch (MoroException ex) {
 			System.out.println("ERROR: " + ex.getMessage());
 		}
 	}
 	
-	private void eliminarActivitatDossier(){
-		llistatActivitatDossier();
+	private void deleteActivitatDossier(){
+		activitatDossierList();
 		scanner = new Scanner(System.in);
 		
 		System.out.println("Entra el id del item que vols eliminar:");
@@ -181,12 +181,42 @@ public class MinimumExerciser {
 		} catch (MoroException ex) {
 			System.out.println("ERROR: " + ex.getMessage());
 		}
-		
-		
-		
 	}
 	
-	private void llistatActivitatDossier(){
+	private void updateActivitatDossier(){
+		activitatDossierList();
+		scanner = new Scanner(System.in);
+		
+		System.out.println("Entra el id del item que vols modificar:");
+		int id = (int) scanner.nextInt();
+		
+		try {
+			ActivitatDossier a = enquestaService.getActivitatDossier(id);
+			if (a == null) {
+				System.out.println("ActivitatDossier with ID [" + id + "] not found");
+			} else {
+				System.out.println("Entra el nou idDossier:");
+				int newIdDossier = (int) scanner.nextInt();
+				
+				System.out.println("Entra el nou idServei:");
+				int newIdServei = (int) scanner.nextInt();
+				
+				a.setIdDossier(newIdDossier);
+				a.setIdServei(newIdServei);
+				
+				try {
+					enquestaService.updateActivitatDossier(a);
+					System.out.println("ActivitatDossier with ID [" + id + "] updated");
+				} catch (MoroException ex) {
+					System.out.println("ERROR: " + ex.getMessage());
+				}
+			}
+		} catch (MoroException ex) {
+			System.out.println("ERROR: " + ex.getMessage());
+		}
+	}
+	
+	private void activitatDossierList(){
 		try {
 			ActivitatDossier[] a = this.enquestaService.getActivitatDossierList();
 			for(int i = 0; i < a.length; i++){
@@ -197,7 +227,7 @@ public class MinimumExerciser {
 		}
 	}
 	
-	private void llistats() {
+	private void menuList() {
 		int choice;
 		do{
 			System.out.println("============================");
