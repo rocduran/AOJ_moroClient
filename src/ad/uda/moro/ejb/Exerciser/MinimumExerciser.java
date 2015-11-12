@@ -281,6 +281,7 @@ public class MinimumExerciser {
 			System.out.println("| 1. Inserir item          |");
 			System.out.println("| 2. Eliminar item         |");
 			System.out.println("| 3. Modificar item        |");
+			System.out.println("| 4. Llistar items         |");
 			System.out.println("============================");
 
 			scanner = new Scanner(System.in);
@@ -298,6 +299,9 @@ public class MinimumExerciser {
 				break;
 			case 3:
 				updateDossier();
+				break;
+			case 4:
+				dossierList();
 				break;
 			default:
 				System.out.println("Invalid selection");
@@ -327,13 +331,61 @@ public class MinimumExerciser {
 	}
 
 	private void deleteDossier() {
-		// TODO Auto-generated method stub
-		
+		dossierList();
+		scanner = new Scanner(System.in);
+
+		System.out.println("Entra el id del item que vols eliminar:");
+		int id = (int) scanner.nextInt();
+
+		try {
+			Dossier dossier = enquestaService.getDossierById(id);
+			if (dossier == null) {
+				System.out.println("Dossier with ID [" + id + "] not found");
+				return;
+			}
+			enquestaService.deleteDossier(id);
+			System.out.println("Dossier with ID [" + id + "] deleted");
+		} catch (MoroException ex) {
+			System.out.println("ERROR: " + ex.getMessage());
+		}
 	}
 
 	private void updateDossier() {
-		// TODO Auto-generated method stub
+		dossierList();
+		scanner = new Scanner(System.in);
+
+		System.out.println("Entra el id del item que vols modificar:");
+		int id = (int) scanner.nextInt();
 		
+		Dossier dossier = null;
+		try {
+			dossier = enquestaService.getDossierById(id);
+			if (dossier == null){
+				System.out.println("Dossier with id=" + id + " is null !");
+				return;
+			}
+		} catch (Exception ex) {
+			System.out.println("ERROR getting ActivitatDossier: " + ex.getMessage());
+			return;
+		}
+		
+		scanner = new Scanner(System.in);
+		System.out.println("Entra el nou preu:");
+		int newPreu = (int) scanner.nextInt();
+		
+		scanner = new Scanner(System.in);
+		System.out.println("Entra la nova descripcio:");
+		String newDescripcio = (String) scanner.nextLine();
+		
+		dossier.setPreu(newPreu);
+		dossier.setDescripcio(newDescripcio);
+		
+		try {
+			enquestaService.updateDossier(dossier);
+			System.out.println("Dossier updated succesfully !");
+		} catch (Exception ex) {
+			System.out.println("ERROR updating Dossier: " + ex.getMessage());
+		}
 	}
 
 	private void crudServei() {
@@ -347,6 +399,7 @@ public class MinimumExerciser {
 			System.out.println("| 1. Inserir item          |");
 			System.out.println("| 2. Eliminar item         |");
 			System.out.println("| 3. Modificar item        |");
+			System.out.println("| 4. Llistar items         |");
 			System.out.println("============================");
 
 			scanner = new Scanner(System.in);
@@ -364,6 +417,9 @@ public class MinimumExerciser {
 				break;
 			case 3:
 				updateServei();
+				break;
+			case 4:
+				serveiList();
 				break;
 			default:
 				System.out.println("Invalid selection");
@@ -394,8 +450,25 @@ public class MinimumExerciser {
 	}
 
 	private void deleteServei() {
-		// TODO Auto-generated method stub
-		
+		//TODO mirar xq cony pete ! XD
+		serveiList();
+		scanner = new Scanner(System.in);
+
+		System.out.println("Entra el id del item que vols eliminar:");
+		int id = (int) scanner.nextInt();
+
+		try {
+			Servei servei = enquestaService.getServeiById(id);
+			if (servei == null) {
+				System.out.println("Servei with ID [" + id + "] not found");
+				return;
+			}
+			System.out.println(servei);
+			enquestaService.deleteServei(id);
+			System.out.println("Servei with ID [" + id + "] deleted");
+		} catch (MoroException ex) {
+			System.out.println("ERROR: " + ex.getMessage());
+		}
 	}
 
 	private void updateServei() {
@@ -414,6 +487,7 @@ public class MinimumExerciser {
 			System.out.println("| 1. Inserir item          |");
 			System.out.println("| 2. Eliminar item         |");
 			System.out.println("| 3. Modificar item        |");
+			System.out.println("| 4. Llistar items         |");
 			System.out.println("============================");
 
 			scanner = new Scanner(System.in);
@@ -431,6 +505,9 @@ public class MinimumExerciser {
 				break;
 			case 3:
 				updateParametre();
+				break;
+			case 4:
+				parametreList();
 				break;
 			default:
 				System.out.println("Invalid selection");
@@ -460,13 +537,61 @@ public class MinimumExerciser {
 	}
 
 	private void deleteParametre() {
-		// TODO Auto-generated method stub
-		
+		parametreList();
+		scanner = new Scanner(System.in);
+
+		System.out.println("Entra el id del item que vols eliminar:");
+		int id = (int) scanner.nextInt();
+
+		try {
+			Parametre parametre = enquestaService.getParametreById(id);
+			if (parametre == null) {
+				System.out.println("Parametre with ID [" + id + "] not found");
+				return;
+			}
+			enquestaService.deleteParametre(id);
+			System.out.println("Parametre with ID [" + id + "] deleted");
+		} catch (MoroException ex) {
+			System.out.println("ERROR: " + ex.getMessage());
+		}
 	}
 
 	private void updateParametre() {
-		// TODO Auto-generated method stub
+		parametreList();
+		scanner = new Scanner(System.in);
+
+		System.out.println("Entra el id del item que vols modificar:");
+		int id = (int) scanner.nextInt();
 		
+		Parametre parametre = null;
+		try {
+			parametre = enquestaService.getParametreById(id);
+			if (parametre == null){
+				System.out.println("Parametre with id=" + id + " is null !");
+				return;
+			}
+		} catch (Exception ex) {
+			System.out.println("ERROR getting Parametre: " + ex.getMessage());
+			return;
+		}
+		
+		scanner = new Scanner(System.in);
+		System.out.println("Entra el nou idTipus:");
+		int newIdTipus = (int) scanner.nextInt();
+		
+		scanner = new Scanner(System.in);
+		System.out.println("Entra la nova descripcio:");
+		String newDescripcio = (String) scanner.nextLine();
+		
+		parametre.setIdTipus(newIdTipus);
+		parametre.setDescripcio(newDescripcio);
+		
+		try {
+			enquestaService.updateParametre(parametre);
+			System.out.println("Dossier updated succesfully !");
+		} catch (Exception ex) {
+			System.out.println("ERROR updating Dossier: " + ex.getMessage());
+		}
 	}
 
 	private void crudValoracio() {
@@ -480,6 +605,7 @@ public class MinimumExerciser {
 			System.out.println("| 1. Inserir item          |");
 			System.out.println("| 2. Eliminar item         |");
 			System.out.println("| 3. Modificar item        |");
+			System.out.println("| 4. Llistar items         |");
 			System.out.println("============================");
 
 			scanner = new Scanner(System.in);
@@ -497,6 +623,9 @@ public class MinimumExerciser {
 				break;
 			case 3:
 				updateValoracio();
+				break;
+			case 4:
+				valoracioList();
 				break;
 			default:
 				System.out.println("Invalid selection");
@@ -639,6 +768,22 @@ public class MinimumExerciser {
 		}
 	}
 	
+	private void valoracioList() {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	private void parametreList(){
+		try {
+			Parametre[] parametres = this.enquestaService.getParametreList();
+			for (int i = 0; i < parametres.length; i++) {
+				System.out.println(parametres[i].toString());
+			}
+		} catch (Exception ex) {
+			System.out.println("EJB access to getParametreList failed. Reason: " + ex.getMessage());
+		}
+	}
+	
 	private void valoracioServeiList() {
 		serveiList();
 		
@@ -646,33 +791,30 @@ public class MinimumExerciser {
 		System.out.println("Entra el id del Servei que vulguis llistar les valoracions:");
 		int idServei = (int) scanner.nextInt();
 		
-		Servei servei = null;
-		try {
-			servei = enquestaService.getServeiById(idServei);
-			if (servei == null){
-				System.out.println("Dossier with id= " + idServei + "is null!");
-				return;
-			}
-		} catch (Exception ex) {
-			System.out.println("EJB access to getServeiById failed. Reason: " + ex.getMessage());
-		}
-		
 		try {
 			Valoracio[] valoracions = this.enquestaService.getValoracioServei(idServei);
 			for (int i = 0; i < valoracions.length; i++) {
-				System.out.println(valoracions[i].getIdServei());
+				System.out.println(valoracions[i].toString());
 			}
 		} catch (Exception ex) {
-			System.out.println("EJB access to getValoracioServei failed. Reason: " + ex.getMessage());
-		}
-		
-		
-		
+			System.out.println("EJB access to getValoracioServeiList failed. Reason: " + ex.getMessage());
+		}	
 	}
 
 	private void valoracioParametreList() {
-		//TODO implement
+		parametreList();
 		
+		scanner = new Scanner(System.in);
+		System.out.println("Entra el id del Parametre que vulguis llistar les valoracions:");
+		int idParam = (int) scanner.nextInt();
+		
+		try {
+			Valoracio[] valoracions = this.enquestaService.getValoracioParametre(idParam);
+			for (int i = 0; i < valoracions.length; i++) {
+				System.out.println(valoracions[i].toString());
+			}
+		} catch (Exception ex) {
+			System.out.println("EJB access to getValoracioParametreList failed. Reason: " + ex.getMessage());
+		}
 	}
-
 }
