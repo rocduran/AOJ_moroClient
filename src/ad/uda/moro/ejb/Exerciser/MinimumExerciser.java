@@ -6,6 +6,7 @@ import java.util.Scanner;
 import javax.naming.*;
 
 import ad.uda.moro.ejb.entity.ActivitatDossier;
+import ad.uda.moro.ejb.entity.Dossier;
 import ad.uda.moro.ejb.entity.Servei;
 import ad.uda.moro.ejb.session.EnquestesServiceRemote;
 import ad.uda.moro.CommonUtilities;
@@ -131,16 +132,28 @@ public class MinimumExerciser {
 	private void addActivitatDossier() {
 		scanner = new Scanner(System.in);
 
-		System.out.println("Entra el id:");
-		int id = (int) scanner.nextInt();
-
 		System.out.println("Entra el idDossier:");
 		int idDossier = (int) scanner.nextInt();
 
+		Dossier dossier = null;
+		try {
+			dossier = enquestaService.getDossierById(idDossier);
+		} catch (MoroException ex) {
+			System.out.println("ERROR dossier: " + ex.getMessage());
+		}
+
 		System.out.println("Entra el idServei:");
 		int idServei = (int) scanner.nextInt();
+		Servei servei = null;
+		try {
+			servei = enquestaService.getServeiById(idServei);
+		} catch (MoroException ex) {
+			System.out.println("ERROR servei: " + ex.getMessage());
+		}
+		
 
-		ActivitatDossier a = new ActivitatDossier(id, idDossier, idServei);
+		ActivitatDossier a = new ActivitatDossier(dossier, servei);
+		int id = a.getId();
 		try {
 			this.enquestaService.addActivitatDossier(a);
 			a = this.enquestaService.getActivitatDossier(id);
@@ -173,36 +186,36 @@ public class MinimumExerciser {
 	}
 
 	private void updateActivitatDossier() {
-		activitatDossierList();
-		scanner = new Scanner(System.in);
-
-		System.out.println("Entra el id del item que vols modificar:");
-		int id = (int) scanner.nextInt();
-
-		try {
-			ActivitatDossier a = enquestaService.getActivitatDossier(id);
-			if (a == null) {
-				System.out.println("ActivitatDossier with ID [" + id + "] not found");
-			} else {
-				System.out.println("Entra el nou idDossier:");
-				int newIdDossier = (int) scanner.nextInt();
-
-				System.out.println("Entra el nou idServei:");
-				int newIdServei = (int) scanner.nextInt();
-
-				a.setIdDossier(newIdDossier);
-				a.setIdServei(newIdServei);
-
-				try {
-					enquestaService.updateActivitatDossier(a);
-					System.out.println("ActivitatDossier with ID [" + id + "] updated");
-				} catch (MoroException ex) {
-					System.out.println("ERROR: " + ex.getMessage());
-				}
-			}
-		} catch (MoroException ex) {
-			System.out.println("ERROR: " + ex.getMessage());
-		}
+//		activitatDossierList();
+//		scanner = new Scanner(System.in);
+//
+//		System.out.println("Entra el id del item que vols modificar:");
+//		int id = (int) scanner.nextInt();
+//
+//		try {
+//			ActivitatDossier a = enquestaService.getActivitatDossier(id);
+//			if (a == null) {
+//				System.out.println("ActivitatDossier with ID [" + id + "] not found");
+//			} else {
+//				System.out.println("Entra el nou idDossier:");
+//				int newIdDossier = (int) scanner.nextInt();
+//
+//				System.out.println("Entra el nou idServei:");
+//				int newIdServei = (int) scanner.nextInt();
+//
+//				a.setIdDossier(newIdDossier);
+//				a.setIdServei(newIdServei);
+//
+//				try {
+//					enquestaService.updateActivitatDossier(a);
+//					System.out.println("ActivitatDossier with ID [" + id + "] updated");
+//				} catch (MoroException ex) {
+//					System.out.println("ERROR: " + ex.getMessage());
+//				}
+//			}
+//		} catch (MoroException ex) {
+//			System.out.println("ERROR: " + ex.getMessage());
+//		}
 	}
 
 	private void activitatDossierList() {
