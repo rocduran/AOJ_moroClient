@@ -5,6 +5,9 @@ import java.util.Scanner;
 
 import javax.naming.*;
 
+import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
+
 import ad.uda.moro.ejb.entity.ActivitatDossier;
 import ad.uda.moro.ejb.entity.Dossier;
 import ad.uda.moro.ejb.entity.Parametre;
