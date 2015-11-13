@@ -38,6 +38,7 @@ public class MinimumExerciser {
 
 	private void exercise() {
 		PropertyConfigurator.configure(LOG4JPROPERTIES); // If we are here, the file exists. Otherwise an exception occurred
+		System.out.println("EXERCISER STARTS HERE");
 		log.info("EXERCISER STARTS HERE");
 
 		// Create InitialContext:
@@ -46,23 +47,29 @@ public class MinimumExerciser {
 
 		try {
 			this.initialContext = new InitialContext(properties);
+			System.out.println("InitialContext created");
 			log.info("InitialContext created");
 		} catch (NamingException ex) {
+			System.out.println("Create InitialContext - ERROR. Details: " + ex.getMessage());
 			log.error("Create InitialContext - ERROR. Details: " + ex.getMessage());
 		}
 
 		// Look up EnquestesServiceRemote:
 		String lookupName = CommonUtilities.getLookupEJBName("EnquestesServiceBean",
 				EnquestesServiceRemote.class.getName());
+		System.out.println("About to look up EnquestesServiceRemote. JNDI name = [" + lookupName + "]");
 		log.info("About to look up EnquestesServiceRemote. JNDI name = [" + lookupName + "]");
 		try {
 			this.enquestaService = (EnquestesServiceRemote) initialContext.lookup(lookupName);
+			System.out.println("Look up EnquestesServiceRemote succeeded");
 			log.info("Look up EnquestesServiceRemote succeeded");
 		} catch (NamingException ex) {
+			System.out.println("Look up EnquestesServiceRemote ERROR. Details: " + ex.getMessage());
 			log.error("Look up EnquestesServiceRemote ERROR. Details: " + ex.getMessage());
 		}
 
 		menu();
+		System.out.println("EXERCISER ENDS HERE");
 		log.info("EXERCISER ENDS HERE");
 
 	}
@@ -164,6 +171,7 @@ public class MinimumExerciser {
 		try {
 			dossier = enquestaService.getDossierById(idDossier);
 		} catch (MoroException ex) {
+			System.out.println("ERROR dossier: " + ex.getMessage());
 			log.error("ERROR dossier: " + ex.getMessage());
 		}
 
@@ -173,6 +181,7 @@ public class MinimumExerciser {
 		try {
 			servei = enquestaService.getServeiById(idServei);
 		} catch (MoroException ex) {
+			System.out.println("ERROR servei: " + ex.getMessage());
 			log.error("ERROR servei: " + ex.getMessage());
 		}
 		
@@ -180,8 +189,10 @@ public class MinimumExerciser {
 		ActivitatDossier a = new ActivitatDossier(dossier, servei);
 		try {
 			this.enquestaService.addActivitatDossier(a);
+			System.out.println("ActivitatDossier succesfully added. Details:" + a.toString());
 			log.info("ActivitatDossier succesfully added. Details:" + a.toString());
 		} catch (MoroException ex) {
+			System.out.println("ERROR: " + ex.getMessage());
 			log.error("ERROR: " + ex.getMessage());
 		}
 	}
@@ -196,11 +207,14 @@ public class MinimumExerciser {
 		try {
 			ActivitatDossier a = enquestaService.getActivitatDossierById(id);
 			if (a == null) {
+				System.out.println("ActivitatDossier with ID [" + id + "] not found");
 				log.error("ActivitatDossier with ID [" + id + "] not found");
 			}
 			enquestaService.deleteActivitatDossier(id);
+			System.out.println("ActivitatDossier with ID [" + id + "] deleted");
 			log.info("ActivitatDossier with ID [" + id + "] deleted");
 		} catch (MoroException ex) {
+			System.out.println("ERROR: " + ex.getMessage());
 			log.error("ERROR: " + ex.getMessage());
 		}
 	}
@@ -216,10 +230,12 @@ public class MinimumExerciser {
 		try {
 			activitatDossier = enquestaService.getActivitatDossierById(id);
 			if (activitatDossier == null){
+				System.out.println("activitatDossier with id=" + id + " is null !");
 				log.error("activitatDossier with id=" + id + " is null !");
 				return;
 			}
 		} catch (Exception ex) {
+			System.out.println("ERROR getting ActivitatDossier: " + ex.getMessage());
 			log.error("ERROR getting ActivitatDossier: " + ex.getMessage());
 			return;
 		}
@@ -232,6 +248,7 @@ public class MinimumExerciser {
 		try {
 			newDossier = enquestaService.getDossierById(idDossier);
 			if (newDossier == null){
+				System.out.println("Dossier with id=" + idDossier + " is null !");
 				log.error("Dossier with id=" + idDossier + " is null !");
 				return;
 			}
@@ -248,10 +265,12 @@ public class MinimumExerciser {
 		try {
 			newServei = enquestaService.getServeiById(idServei);
 			if (newServei == null){
+				System.out.println("Servei with id=" + idServei + " is null !");
 				log.error("Servei with id=" + idServei + " is null !");
 				return;
 			}
 		} catch (Exception ex) {
+			System.out.println("ERROR getting Servei: " + ex.getMessage());
 			log.error("ERROR getting Servei: " + ex.getMessage());
 			return;
 		}
@@ -261,8 +280,10 @@ public class MinimumExerciser {
 		
 		try {
 			enquestaService.updateActivitatDossier(activitatDossier);
+			System.out.println("ActivitatDossier updated succesfully !");
 			log.info("ActivitatDossier updated succesfully !");
 		} catch (Exception ex) {
+			System.out.println("ERROR updating ActivitatDossier: " + ex.getMessage());
 			log.error("ERROR updating ActivitatDossier: " + ex.getMessage());
 		}
 	}
@@ -274,6 +295,7 @@ public class MinimumExerciser {
 				System.out.println(a[i].toString());
 			}
 		} catch (Exception ex) {
+			System.out.println("EJB access to getActivitatDossierList failed. Reason: " + ex.getMessage());
 			log.error("EJB access to getActivitatDossierList failed. Reason: " + ex.getMessage());
 		}
 	}
@@ -332,8 +354,10 @@ public class MinimumExerciser {
 
 		try {
 			this.enquestaService.addDossier(dossier);
+			System.out.println("Dossier succesfully added.");
 			log.info("Dossier succesfully added.");
 		} catch (MoroException ex) {
+			System.out.println("ERROR: " + ex.getMessage());
 			log.error("ERROR: " + ex.getMessage());
 		}
 	}
@@ -348,12 +372,15 @@ public class MinimumExerciser {
 		try {
 			Dossier dossier = enquestaService.getDossierById(id);
 			if (dossier == null) {
+				System.out.println("Dossier with ID [" + id + "] not found");
 				log.error("Dossier with ID [" + id + "] not found");
 				return;
 			}
 			enquestaService.deleteDossier(id);
+			System.out.println("Dossier with ID [" + id + "] deleted");
 			log.info("Dossier with ID [" + id + "] deleted");
 		} catch (MoroException ex) {
+			System.out.println("ERROR: " + ex.getMessage());
 			log.error("ERROR: " + ex.getMessage());
 		}
 	}
@@ -369,10 +396,12 @@ public class MinimumExerciser {
 		try {
 			dossier = enquestaService.getDossierById(id);
 			if (dossier == null){
+				System.out.println("Dossier with id=" + id + " is null !");
 				log.error("Dossier with id=" + id + " is null !");
 				return;
 			}
 		} catch (Exception ex) {
+			System.out.println("ERROR getting ActivitatDossier: " + ex.getMessage());
 			log.error("ERROR getting ActivitatDossier: " + ex.getMessage());
 			return;
 		}
@@ -390,8 +419,10 @@ public class MinimumExerciser {
 		
 		try {
 			enquestaService.updateDossier(dossier);
+			System.out.println("Dossier updated succesfully !");
 			log.info("Dossier updated succesfully !");
 		} catch (Exception ex) {
+			System.out.println("ERROR updating Dossier: " + ex.getMessage());
 			log.error("ERROR updating Dossier: " + ex.getMessage());
 		}
 	}
@@ -452,6 +483,7 @@ public class MinimumExerciser {
 			this.enquestaService.addServei(servei);
 			System.out.println("Servei succesfully added.");
 		} catch (MoroException ex) {
+			System.out.println("ERROR: " + ex.getMessage());
 			log.error("ERROR: " + ex.getMessage());
 		}
 		
@@ -468,6 +500,7 @@ public class MinimumExerciser {
 		try {
 			Servei servei = enquestaService.getServeiById(id);
 			if (servei == null) {
+				System.out.println("Servei with ID [" + id + "] not found");
 				log.error("Servei with ID [" + id + "] not found");
 				return;
 			}
@@ -475,6 +508,7 @@ public class MinimumExerciser {
 			enquestaService.deleteServei(id);
 			System.out.println("Servei with ID [" + id + "] deleted");
 		} catch (MoroException ex) {
+			System.out.println("ERROR: " + ex.getMessage());
 			log.error("ERROR: " + ex.getMessage());
 		}
 	}
@@ -538,8 +572,10 @@ public class MinimumExerciser {
 
 		try {
 			this.enquestaService.addParametre(parametre);
+			System.out.println("Parametre succesfully added.");
 			log.info("Parametre succesfully added.");
 		} catch (MoroException ex) {
+			System.out.println("ERROR: " + ex.getMessage());
 			log.error("ERROR: " + ex.getMessage());
 		}
 	}
@@ -554,12 +590,15 @@ public class MinimumExerciser {
 		try {
 			Parametre parametre = enquestaService.getParametreById(id);
 			if (parametre == null) {
+				System.out.println("Parametre with ID [" + id + "] not found");
 				log.error("Parametre with ID [" + id + "] not found");
 				return;
 			}
 			enquestaService.deleteParametre(id);
+			System.out.println("Parametre with ID [" + id + "] deleted");
 			log.info("Parametre with ID [" + id + "] deleted");
 		} catch (MoroException ex) {
+			System.out.println("ERROR: " + ex.getMessage());
 			log.error("ERROR: " + ex.getMessage());
 		}
 	}
@@ -575,10 +614,12 @@ public class MinimumExerciser {
 		try {
 			parametre = enquestaService.getParametreById(id);
 			if (parametre == null){
+				System.out.println("Parametre with id=" + id + " is null !");
 				log.error("Parametre with id=" + id + " is null !");
 				return;
 			}
 		} catch (Exception ex) {
+			System.out.println("ERROR getting Parametre: " + ex.getMessage());
 			log.error("ERROR getting Parametre: " + ex.getMessage());
 			return;
 		}
@@ -596,8 +637,10 @@ public class MinimumExerciser {
 		
 		try {
 			enquestaService.updateParametre(parametre);
+			System.out.println("Dossier updated succesfully !");
 			log.info("Dossier updated succesfully !");
 		} catch (Exception ex) {
+			System.out.println("ERROR updating Dossier: " + ex.getMessage());
 			log.error("ERROR updating Dossier: " + ex.getMessage());
 		}
 	}
@@ -651,6 +694,7 @@ public class MinimumExerciser {
 		try {
 			dossier = enquestaService.getDossierById(idDossier);
 		} catch (Exception e) {
+			System.out.println("Error while looking at Dossier with id: " + idDossier);
 			log.error("Error while looking at Dossier with id: " + idDossier);
 			return;
 		}
@@ -661,6 +705,7 @@ public class MinimumExerciser {
 		try {
 			servei = enquestaService.getServeiById(idServei);
 		} catch (Exception e) {
+			System.out.println("Error while looking at Servei with id: " + idServei);
 			log.error("Error while looking at Servei with id: " + idServei);
 			return;
 		}
@@ -671,6 +716,7 @@ public class MinimumExerciser {
 		try {
 			parametre = enquestaService.getParametreById(idParam);
 		} catch (Exception e) {
+			System.out.println("Error while looking at Parametre with id: " + idParam);
 			log.error("Error while looking at Parametre with id: " + idParam);
 			return;
 		}
@@ -682,8 +728,10 @@ public class MinimumExerciser {
 
 		try {
 			this.enquestaService.addValoracio(valoracio);
+			System.out.println("Valoracio succesfully added.");
 			log.info("Valoracio succesfully added.");
 		} catch (MoroException ex) {
+			System.out.println("ERROR: " + ex.getMessage());
 			log.error("ERROR: " + ex.getMessage());
 		}
 		
@@ -748,6 +796,7 @@ public class MinimumExerciser {
 				System.out.println(a[i].getIdServei());
 			}
 		} catch (Exception ex) {
+			System.out.println("EJB access to getActivitatDossierList failed. Reason: " + ex.getMessage());
 			log.error("EJB access to getActivitatDossierList failed. Reason: " + ex.getMessage());
 		}
 		
@@ -760,6 +809,7 @@ public class MinimumExerciser {
 				System.out.println(dossiers[i].toString());
 			}
 		} catch (Exception ex) {
+			System.out.println("EJB access to getActivitatDossierList failed. Reason: " + ex.getMessage());
 			log.error("EJB access to getActivitatDossierList failed. Reason: " + ex.getMessage());
 		}
 		
@@ -772,6 +822,7 @@ public class MinimumExerciser {
 				System.out.println(serveis[i].toString());
 			}
 		} catch (Exception ex) {
+			System.out.println("EJB access to getActivitatDossierList failed. Reason: " + ex.getMessage());
 			log.error("EJB access to getActivitatDossierList failed. Reason: " + ex.getMessage());
 		}
 	}
@@ -788,6 +839,7 @@ public class MinimumExerciser {
 				System.out.println(parametres[i].toString());
 			}
 		} catch (Exception ex) {
+			System.out.println("EJB access to getParametreList failed. Reason: " + ex.getMessage());
 			log.error("EJB access to getParametreList failed. Reason: " + ex.getMessage());
 		}
 	}
@@ -805,6 +857,7 @@ public class MinimumExerciser {
 				System.out.println(valoracions[i].toString());
 			}
 		} catch (Exception ex) {
+			System.out.println("EJB access to getValoracioServeiList failed. Reason: " + ex.getMessage());
 			log.error("EJB access to getValoracioServeiList failed. Reason: " + ex.getMessage());
 		}	
 	}
@@ -822,6 +875,7 @@ public class MinimumExerciser {
 				System.out.println(valoracions[i].toString());
 			}
 		} catch (Exception ex) {
+			System.out.println("EJB access to getValoracioParametreList failed. Reason: " + ex.getMessage());
 			log.error("EJB access to getValoracioParametreList failed. Reason: " + ex.getMessage());
 		}
 	}

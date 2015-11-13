@@ -1,1 +1,10 @@
-12-11-2015 23:14:33,115 [main] (MinimumExerciser) INFO  MoroExerciser  - EXERCISER STARTS HERE
+13-11-2015 13:23:18,926 [main] (MinimumExerciser) INFO  MoroExerciser  - EXERCISER STARTS HERE
+13-11-2015 13:23:18,945 [main] (MinimumExerciser) INFO  MoroExerciser  - InitialContext created
+13-11-2015 13:23:19,023 [main] (MinimumExerciser) INFO  MoroExerciser  - About to look up EnquestesServiceRemote. JNDI name = [ejb:/Moro//EnquestesServiceBean!ad.uda.moro.ejb.session.EnquestesServiceRemote]
+13-11-2015 13:23:19,318 [main] (MinimumExerciser) INFO  MoroExerciser  - Look up EnquestesServiceRemote succeeded
+13-11-2015 13:28:20,701 [main] (MinimumExerciser) INFO  MoroExerciser  - EXERCISER STARTS HERE
+13-11-2015 13:28:20,706 [main] (MinimumExerciser) INFO  MoroExerciser  - InitialContext created
+13-11-2015 13:28:20,779 [main] (MinimumExerciser) INFO  MoroExerciser  - About to look up EnquestesServiceRemote. JNDI name = [ejb:/Moro//EnquestesServiceBean!ad.uda.moro.ejb.session.EnquestesServiceRemote]
+13-11-2015 13:28:20,886 [main] (MinimumExerciser) INFO  MoroExerciser  - Look up EnquestesServiceRemote succeeded
+13-11-2015 13:28:52,323 [main] (MinimumExerciser) INFO  MoroExerciser  - Dossier with ID [4] deleted
+13-11-2015 13:29:37,604 [main] (MinimumExerciser) INFO  MoroExerciser  - Dossier succesfully added.
