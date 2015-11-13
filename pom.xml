@@ -1,10 +1,10 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>ad.uda.moro.ejb</groupId>
-  <artifactId>PlaygroundEJBExerciser</artifactId>
+  <artifactId>MoroExerciser</artifactId>
   <version>0.0.2</version>
   <name>PlaygroundEJBExerciser</name>
-  <description>Exerciser per a PlaygroundEJB</description>
+  <description>Exerciser per a Moro</description>
   <build>
     <sourceDirectory>src</sourceDirectory>
     <plugins>
