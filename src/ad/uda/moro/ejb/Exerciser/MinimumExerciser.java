@@ -19,21 +19,496 @@ import ad.uda.moro.MoroException;
 
 public class MinimumExerciser {
 	
-	// log4j context:
+	static Logger log = Logger.getLogger("MoroExerciser"); // This is the application logger
+		// log4j context:
 		/** Location of the Log4J properties file */ public static final String LOG4JPROPERTIES = "properties/log4j.properties";
-		static Logger log = Logger.getLogger("MoroExerciser"); // This is the application logger
 	
-	// Remoting context:
-	InitialContext initialContext = null;
-
 	private static final String PKG_INTERFACES = "org.jboss.ejb.client.naming";
-
-	private EnquestesServiceRemote enquestaService = null;
-
-	private Scanner scanner;
 
 	public static void main(String[] args) {
 		new MinimumExerciser().exercise();
+	}
+
+	private EnquestesServiceRemote enquestaService = null;
+
+	// Remoting context:
+	InitialContext initialContext = null;
+
+	private Scanner scanner;
+
+	private void activitatDossierList() {
+		try {
+			ActivitatDossier[] a = this.enquestaService.getActivitatDossierList();
+			for (int i = 0; i < a.length; i++) {
+				System.out.println(a[i].toString());
+			}
+		} catch (Exception ex) {
+			System.out.println("EJB access to getActivitatDossierList failed. Reason: " + ex.getMessage());
+			log.error("EJB access to getActivitatDossierList failed. Reason: " + ex.getMessage());
+		}
+	}
+
+	private void addActivitatDossier() {
+		scanner = new Scanner(System.in);
+
+		System.out.println("Entra el idDossier:");
+		int idDossier = (int) scanner.nextInt();
+		Dossier dossier = null;
+		try {
+			dossier = enquestaService.getDossierById(idDossier);
+		} catch (MoroException ex) {
+			System.out.println("ERROR dossier: " + ex.getMessage());
+			log.error("ERROR dossier: " + ex.getMessage());
+		}
+
+		System.out.println("Entra el idServei:");
+		int idServei = (int) scanner.nextInt();
+		Servei servei = null;
+		try {
+			servei = enquestaService.getServeiById(idServei);
+		} catch (MoroException ex) {
+			System.out.println("ERROR servei: " + ex.getMessage());
+			log.error("ERROR servei: " + ex.getMessage());
+		}
+		
+
+		ActivitatDossier a = new ActivitatDossier(dossier, servei);
+		try {
+			this.enquestaService.addActivitatDossier(a);
+			System.out.println("ActivitatDossier succesfully added. Details:" + a.toString());
+			log.info("ActivitatDossier succesfully added. Details:" + a.toString());
+		} catch (MoroException ex) {
+			System.out.println("ERROR: " + ex.getMessage());
+			log.error("ERROR: " + ex.getMessage());
+		}
+	}
+
+	private void addDossier() {
+		scanner = new Scanner(System.in);
+
+		System.out.println("Entra el preu:");
+		int preu = (int) scanner.nextInt();
+		
+		scanner = new Scanner(System.in);
+		System.out.println("Entra la descripcio:");
+		String desc = (String) scanner.nextLine();
+			
+		Dossier dossier = new Dossier(preu, desc);
+
+		try {
+			this.enquestaService.addDossier(dossier);
+			System.out.println("Dossier succesfully added.");
+			log.info("Dossier succesfully added.");
+		} catch (MoroException ex) {
+			System.out.println("ERROR: " + ex.getMessage());
+			log.error("ERROR: " + ex.getMessage());
+		}
+	}
+
+	private void addParametre() {
+		scanner = new Scanner(System.in);
+
+		System.out.println("Entra el idTipus:");
+		int preu = (int) scanner.nextInt();
+		
+		scanner = new Scanner(System.in);
+		System.out.println("Entra la descripcio:");
+		String desc = (String) scanner.nextLine();
+			
+		Parametre parametre = new Parametre(preu, desc);
+
+		try {
+			this.enquestaService.addParametre(parametre);
+			System.out.println("Parametre succesfully added.");
+			log.info("Parametre succesfully added.");
+		} catch (MoroException ex) {
+			System.out.println("ERROR: " + ex.getMessage());
+			log.error("ERROR: " + ex.getMessage());
+		}
+	}
+
+	private void addServei() {
+		scanner = new Scanner(System.in);
+
+		System.out.println("Entra el idTipus:");
+		int idTipus = (int) scanner.nextInt();
+		
+		scanner = new Scanner(System.in);
+		System.out.println("Entra la descripcio:");
+		String desc = (String) scanner.nextLine();
+			
+		Servei servei = new Servei(idTipus, desc);
+
+		try {
+			this.enquestaService.addServei(servei);
+			System.out.println("Servei succesfully added.");
+		} catch (MoroException ex) {
+			System.out.println("ERROR: " + ex.getMessage());
+			log.error("ERROR: " + ex.getMessage());
+		}
+		
+	}
+
+	private void addValoracio() {
+		scanner = new Scanner(System.in);
+
+		System.out.println("Entra el idDossier:");
+		int idDossier = (int) scanner.nextInt();
+		Dossier dossier = null;
+		try {
+			dossier = enquestaService.getDossierById(idDossier);
+		} catch (Exception e) {
+			System.out.println("Error while looking at Dossier with id: " + idDossier);
+			log.error("Error while looking at Dossier with id: " + idDossier);
+			return;
+		}
+		
+		System.out.println("Entra el idServei:");
+		int idServei = (int) scanner.nextInt();
+		Servei servei = null;
+		try {
+			servei = enquestaService.getServeiById(idServei);
+		} catch (Exception e) {
+			System.out.println("Error while looking at Servei with id: " + idServei);
+			log.error("Error while looking at Servei with id: " + idServei);
+			return;
+		}
+		
+		System.out.println("Entra el idParam:");
+		int idParam = (int) scanner.nextInt();
+		Parametre parametre = null;
+		try {
+			parametre = enquestaService.getParametreById(idParam);
+		} catch (Exception e) {
+			System.out.println("Error while looking at Parametre with id: " + idParam);
+			log.error("Error while looking at Parametre with id: " + idParam);
+			return;
+		}
+		
+		System.out.println("Entra el valor:");
+		int valor = (int) scanner.nextInt();
+		
+		Valoracio valoracio = new Valoracio(dossier, servei, parametre, valor);
+
+		try {
+			this.enquestaService.addValoracio(valoracio);
+			System.out.println("Valoracio succesfully added.");
+			log.info("Valoracio succesfully added.");
+		} catch (MoroException ex) {
+			System.out.println("ERROR: " + ex.getMessage());
+			log.error("ERROR: " + ex.getMessage());
+		}
+		
+	}
+
+	private void crudActivitatDossier() {
+		int choice;
+		do {
+			System.out.println("============================");
+			System.out.println("|      MORO EXERCISER      |");
+			System.out.println("============================");
+			System.out.println("| CRUD activitatDossier:   |");
+			System.out.println("| 0. Exit                  |");
+			System.out.println("| 1. Inserir item          |");
+			System.out.println("| 2. Eliminar item         |");
+			System.out.println("| 3. Modificar item        |");
+			System.out.println("| 4. Llistar items         |");
+			System.out.println("============================");
+
+			scanner = new Scanner(System.in);
+			choice = (int) scanner.nextInt();
+
+			switch (choice) {
+			case 0:
+				System.out.println("Exiting...");
+				break;
+			case 1:
+				addActivitatDossier();
+				break;
+			case 2:
+				deleteActivitatDossier();
+				break;
+			case 3:
+				updateActivitatDossier();
+				break;
+			case 4:
+				activitatDossierList();
+				break;
+			default:
+				System.out.println("Invalid selection");
+				break;
+			}
+		} while (choice != 0);
+	}
+
+	private void crudDossier() {
+		int choice;
+		do {
+			System.out.println("============================");
+			System.out.println("|      MORO EXERCISER      |");
+			System.out.println("============================");
+			System.out.println("| CRUD Dossier:            |");
+			System.out.println("| 0. Exit                  |");
+			System.out.println("| 1. Inserir item          |");
+			System.out.println("| 2. Eliminar item         |");
+			System.out.println("| 3. Modificar item        |");
+			System.out.println("| 4. Llistar items         |");
+			System.out.println("============================");
+
+			scanner = new Scanner(System.in);
+			choice = (int) scanner.nextInt();
+
+			switch (choice) {
+			case 0:
+				System.out.println("Exiting...");
+				break;
+			case 1:
+				addDossier();
+				break;
+			case 2:
+				deleteDossier();
+				break;
+			case 3:
+				updateDossier();
+				break;
+			case 4:
+				dossierList();
+				break;
+			default:
+				System.out.println("Invalid selection");
+				break;
+			}
+		} while (choice != 0);
+	}
+	
+	private void crudParametre() {
+		int choice;
+		do {
+			System.out.println("============================");
+			System.out.println("|      MORO EXERCISER      |");
+			System.out.println("============================");
+			System.out.println("| CRUD Parametre:          |");
+			System.out.println("| 0. Exit                  |");
+			System.out.println("| 1. Inserir item          |");
+			System.out.println("| 2. Eliminar item         |");
+			System.out.println("| 3. Modificar item        |");
+			System.out.println("| 4. Llistar items         |");
+			System.out.println("============================");
+
+			scanner = new Scanner(System.in);
+			choice = (int) scanner.nextInt();
+
+			switch (choice) {
+			case 0:
+				System.out.println("Exiting...");
+				break;
+			case 1:
+				addParametre();
+				break;
+			case 2:
+				deleteParametre();
+				break;
+			case 3:
+				updateParametre();
+				break;
+			case 4:
+				parametreList();
+				break;
+			default:
+				System.out.println("Invalid selection");
+				break;
+			}
+		} while (choice != 0);
+	}
+
+	private void crudServei() {
+		int choice;
+		do {
+			System.out.println("============================");
+			System.out.println("|      MORO EXERCISER      |");
+			System.out.println("============================");
+			System.out.println("| CRUD Servei:             |");
+			System.out.println("| 0. Exit                  |");
+			System.out.println("| 1. Inserir item          |");
+			System.out.println("| 2. Eliminar item         |");
+			System.out.println("| 3. Modificar item        |");
+			System.out.println("| 4. Llistar items         |");
+			System.out.println("============================");
+
+			scanner = new Scanner(System.in);
+			choice = (int) scanner.nextInt();
+
+			switch (choice) {
+			case 0:
+				System.out.println("Exiting...");
+				break;
+			case 1:
+				addServei();
+				break;
+			case 2:
+				deleteServei();
+				break;
+			case 3:
+				updateServei();
+				break;
+			case 4:
+				serveiList();
+				break;
+			default:
+				System.out.println("Invalid selection");
+				break;
+			}
+		} while (choice != 0);
+	}
+
+	private void crudValoracio() {
+		int choice;
+		do {
+			System.out.println("============================");
+			System.out.println("|      MORO EXERCISER      |");
+			System.out.println("============================");
+			System.out.println("| CRUD Valoracio:          |");
+			System.out.println("| 0. Exit                  |");
+			System.out.println("| 1. Inserir item          |");
+			System.out.println("| 2. Eliminar item         |");
+			System.out.println("| 3. Modificar item        |");
+			System.out.println("| 4. Llistar items         |");
+			System.out.println("============================");
+
+			scanner = new Scanner(System.in);
+			choice = (int) scanner.nextInt();
+
+			switch (choice) {
+			case 0:
+				System.out.println("Exiting...");
+				break;
+			case 1:
+				addValoracio();
+				break;
+			case 2:
+				deleteValoracio();
+				break;
+			case 3:
+				updateValoracio();
+				break;
+			case 4:
+				valoracioList();
+				break;
+			default:
+				System.out.println("Invalid selection");
+				break;
+			}
+		} while (choice != 0);
+	}
+
+	private void deleteActivitatDossier() {
+		activitatDossierList();
+		scanner = new Scanner(System.in);
+
+		System.out.println("Entra el id del item que vols eliminar:");
+		int id = (int) scanner.nextInt();
+
+		try {
+			ActivitatDossier a = enquestaService.getActivitatDossierById(id);
+			if (a == null) {
+				System.out.println("ActivitatDossier with ID [" + id + "] not found");
+				log.error("ActivitatDossier with ID [" + id + "] not found");
+			}
+			enquestaService.deleteActivitatDossier(id);
+			System.out.println("ActivitatDossier with ID [" + id + "] deleted");
+			log.info("ActivitatDossier with ID [" + id + "] deleted");
+		} catch (MoroException ex) {
+			System.out.println("ERROR: " + ex.getMessage());
+			log.error("ERROR: " + ex.getMessage());
+		}
+	}
+
+	private void deleteDossier() {
+		dossierList();
+		scanner = new Scanner(System.in);
+
+		System.out.println("Entra el id del item que vols eliminar:");
+		int id = (int) scanner.nextInt();
+
+		try {
+			Dossier dossier = enquestaService.getDossierById(id);
+			if (dossier == null) {
+				System.out.println("Dossier with ID [" + id + "] not found");
+				log.error("Dossier with ID [" + id + "] not found");
+				return;
+			}
+			enquestaService.deleteDossier(id);
+			System.out.println("Dossier with ID [" + id + "] deleted");
+			log.info("Dossier with ID [" + id + "] deleted");
+		} catch (MoroException ex) {
+			System.out.println("ERROR: " + ex.getMessage());
+			log.error("ERROR: " + ex.getMessage());
+		}
+	}
+
+	private void deleteParametre() {
+		parametreList();
+		scanner = new Scanner(System.in);
+
+		System.out.println("Entra el id del item que vols eliminar:");
+		int id = (int) scanner.nextInt();
+
+		try {
+			Parametre parametre = enquestaService.getParametreById(id);
+			if (parametre == null) {
+				System.out.println("Parametre with ID [" + id + "] not found");
+				log.error("Parametre with ID [" + id + "] not found");
+				return;
+			}
+			enquestaService.deleteParametre(id);
+			System.out.println("Parametre with ID [" + id + "] deleted");
+			log.info("Parametre with ID [" + id + "] deleted");
+		} catch (MoroException ex) {
+			System.out.println("ERROR: " + ex.getMessage());
+			log.error("ERROR: " + ex.getMessage());
+		}
+	}
+
+	private void deleteServei() {
+		//TODO mirar xq cony pete ! XD
+		serveiList();
+		scanner = new Scanner(System.in);
+
+		System.out.println("Entra el id del item que vols eliminar:");
+		int id = (int) scanner.nextInt();
+
+		try {
+			Servei servei = enquestaService.getServeiById(id);
+			if (servei == null) {
+				System.out.println("Servei with ID [" + id + "] not found");
+				log.error("Servei with ID [" + id + "] not found");
+				return;
+			}
+			System.out.println(servei);
+			enquestaService.deleteServei(id);
+			System.out.println("Servei with ID [" + id + "] deleted");
+		} catch (MoroException ex) {
+			System.out.println("ERROR: " + ex.getMessage());
+			log.error("ERROR: " + ex.getMessage());
+		}
+	}
+
+	private void deleteValoracio() {
+		// TODO Auto-generated method stub
+		
+	}
+		
+	private void dossierList() {
+		try {
+			Dossier[] dossiers = this.enquestaService.getDossierList();
+			for (int i = 0; i < dossiers.length; i++) {
+				System.out.println(dossiers[i].toString());
+			}
+		} catch (Exception ex) {
+			System.out.println("EJB access to getActivitatDossierList failed. Reason: " + ex.getMessage());
+			log.error("EJB access to getActivitatDossierList failed. Reason: " + ex.getMessage());
+		}
+		
 	}
 
 	private void exercise() {
@@ -122,18 +597,17 @@ public class MinimumExerciser {
 		} while (choice != 0);
 	}
 
-	private void crudActivitatDossier() {
+	private void menuList() {
 		int choice;
 		do {
 			System.out.println("============================");
 			System.out.println("|      MORO EXERCISER      |");
 			System.out.println("============================");
-			System.out.println("| CRUD activitatDossier:   |");
+			System.out.println("| Llistats:                |");
 			System.out.println("| 0. Exit                  |");
-			System.out.println("| 1. Inserir item          |");
-			System.out.println("| 2. Eliminar item         |");
-			System.out.println("| 3. Modificar item        |");
-			System.out.println("| 4. Llistar items         |");
+			System.out.println("| 1. ServeiDossier         |");
+			System.out.println("| 2. ValoracioServei       |");
+			System.out.println("| 3. ValoracioParametre    |");
 			System.out.println("============================");
 
 			scanner = new Scanner(System.in);
@@ -144,16 +618,13 @@ public class MinimumExerciser {
 				System.out.println("Exiting...");
 				break;
 			case 1:
-				addActivitatDossier();
+				serveisDossierList();
 				break;
 			case 2:
-				deleteActivitatDossier();
+				valoracioServeiList();
 				break;
 			case 3:
-				updateActivitatDossier();
-				break;
-			case 4:
-				activitatDossierList();
+				valoracioParametreList();
 				break;
 			default:
 				System.out.println("Invalid selection");
@@ -161,62 +632,48 @@ public class MinimumExerciser {
 			}
 		} while (choice != 0);
 	}
-
-	private void addActivitatDossier() {
-		scanner = new Scanner(System.in);
-
-		System.out.println("Entra el idDossier:");
-		int idDossier = (int) scanner.nextInt();
-		Dossier dossier = null;
+	
+	private void parametreList(){
 		try {
-			dossier = enquestaService.getDossierById(idDossier);
-		} catch (MoroException ex) {
-			System.out.println("ERROR dossier: " + ex.getMessage());
-			log.error("ERROR dossier: " + ex.getMessage());
-		}
-
-		System.out.println("Entra el idServei:");
-		int idServei = (int) scanner.nextInt();
-		Servei servei = null;
-		try {
-			servei = enquestaService.getServeiById(idServei);
-		} catch (MoroException ex) {
-			System.out.println("ERROR servei: " + ex.getMessage());
-			log.error("ERROR servei: " + ex.getMessage());
-		}
-		
-
-		ActivitatDossier a = new ActivitatDossier(dossier, servei);
-		try {
-			this.enquestaService.addActivitatDossier(a);
-			System.out.println("ActivitatDossier succesfully added. Details:" + a.toString());
-			log.info("ActivitatDossier succesfully added. Details:" + a.toString());
-		} catch (MoroException ex) {
-			System.out.println("ERROR: " + ex.getMessage());
-			log.error("ERROR: " + ex.getMessage());
+			Parametre[] parametres = this.enquestaService.getParametreList();
+			for (int i = 0; i < parametres.length; i++) {
+				System.out.println(parametres[i].toString());
+			}
+		} catch (Exception ex) {
+			System.out.println("EJB access to getParametreList failed. Reason: " + ex.getMessage());
+			log.error("EJB access to getParametreList failed. Reason: " + ex.getMessage());
 		}
 	}
 
-	private void deleteActivitatDossier() {
-		activitatDossierList();
-		scanner = new Scanner(System.in);
-
-		System.out.println("Entra el id del item que vols eliminar:");
-		int id = (int) scanner.nextInt();
-
+	private void serveiList(){
 		try {
-			ActivitatDossier a = enquestaService.getActivitatDossierById(id);
-			if (a == null) {
-				System.out.println("ActivitatDossier with ID [" + id + "] not found");
-				log.error("ActivitatDossier with ID [" + id + "] not found");
+			Servei[] serveis = this.enquestaService.getServeiList();
+			for (int i = 0; i < serveis.length; i++) {
+				System.out.println(serveis[i].toString());
 			}
-			enquestaService.deleteActivitatDossier(id);
-			System.out.println("ActivitatDossier with ID [" + id + "] deleted");
-			log.info("ActivitatDossier with ID [" + id + "] deleted");
-		} catch (MoroException ex) {
-			System.out.println("ERROR: " + ex.getMessage());
-			log.error("ERROR: " + ex.getMessage());
+		} catch (Exception ex) {
+			System.out.println("EJB access to getActivitatDossierList failed. Reason: " + ex.getMessage());
+			log.error("EJB access to getActivitatDossierList failed. Reason: " + ex.getMessage());
 		}
+	}
+
+	private void serveisDossierList() {
+		dossierList();
+		
+		scanner = new Scanner(System.in);
+		System.out.println("De quin Dossier vols llistar els serveis ?(entrar idDossier)");
+		int id = (int) scanner.nextInt();
+		
+		try {
+			ActivitatDossier[] a = this.enquestaService.getServeisDossierList(id);
+			for (int i = 0; i < a.length; i++) {
+				System.out.println(a[i].getIdServei());
+			}
+		} catch (Exception ex) {
+			System.out.println("EJB access to getActivitatDossierList failed. Reason: " + ex.getMessage());
+			log.error("EJB access to getActivitatDossierList failed. Reason: " + ex.getMessage());
+		}
+		
 	}
 
 	private void updateActivitatDossier() {
@@ -287,104 +744,7 @@ public class MinimumExerciser {
 			log.error("ERROR updating ActivitatDossier: " + ex.getMessage());
 		}
 	}
-
-	private void activitatDossierList() {
-		try {
-			ActivitatDossier[] a = this.enquestaService.getActivitatDossierList();
-			for (int i = 0; i < a.length; i++) {
-				System.out.println(a[i].toString());
-			}
-		} catch (Exception ex) {
-			System.out.println("EJB access to getActivitatDossierList failed. Reason: " + ex.getMessage());
-			log.error("EJB access to getActivitatDossierList failed. Reason: " + ex.getMessage());
-		}
-	}
-
-	private void crudDossier() {
-		int choice;
-		do {
-			System.out.println("============================");
-			System.out.println("|      MORO EXERCISER      |");
-			System.out.println("============================");
-			System.out.println("| CRUD Dossier:            |");
-			System.out.println("| 0. Exit                  |");
-			System.out.println("| 1. Inserir item          |");
-			System.out.println("| 2. Eliminar item         |");
-			System.out.println("| 3. Modificar item        |");
-			System.out.println("| 4. Llistar items         |");
-			System.out.println("============================");
-
-			scanner = new Scanner(System.in);
-			choice = (int) scanner.nextInt();
-
-			switch (choice) {
-			case 0:
-				System.out.println("Exiting...");
-				break;
-			case 1:
-				addDossier();
-				break;
-			case 2:
-				deleteDossier();
-				break;
-			case 3:
-				updateDossier();
-				break;
-			case 4:
-				dossierList();
-				break;
-			default:
-				System.out.println("Invalid selection");
-				break;
-			}
-		} while (choice != 0);
-	}
 	
-	private void addDossier() {
-		scanner = new Scanner(System.in);
-
-		System.out.println("Entra el preu:");
-		int preu = (int) scanner.nextInt();
-		
-		scanner = new Scanner(System.in);
-		System.out.println("Entra la descripcio:");
-		String desc = (String) scanner.nextLine();
-			
-		Dossier dossier = new Dossier(preu, desc);
-
-		try {
-			this.enquestaService.addDossier(dossier);
-			System.out.println("Dossier succesfully added.");
-			log.info("Dossier succesfully added.");
-		} catch (MoroException ex) {
-			System.out.println("ERROR: " + ex.getMessage());
-			log.error("ERROR: " + ex.getMessage());
-		}
-	}
-
-	private void deleteDossier() {
-		dossierList();
-		scanner = new Scanner(System.in);
-
-		System.out.println("Entra el id del item que vols eliminar:");
-		int id = (int) scanner.nextInt();
-
-		try {
-			Dossier dossier = enquestaService.getDossierById(id);
-			if (dossier == null) {
-				System.out.println("Dossier with ID [" + id + "] not found");
-				log.error("Dossier with ID [" + id + "] not found");
-				return;
-			}
-			enquestaService.deleteDossier(id);
-			System.out.println("Dossier with ID [" + id + "] deleted");
-			log.info("Dossier with ID [" + id + "] deleted");
-		} catch (MoroException ex) {
-			System.out.println("ERROR: " + ex.getMessage());
-			log.error("ERROR: " + ex.getMessage());
-		}
-	}
-
 	private void updateDossier() {
 		dossierList();
 		scanner = new Scanner(System.in);
@@ -426,183 +786,7 @@ public class MinimumExerciser {
 			log.error("ERROR updating Dossier: " + ex.getMessage());
 		}
 	}
-
-	private void crudServei() {
-		int choice;
-		do {
-			System.out.println("============================");
-			System.out.println("|      MORO EXERCISER      |");
-			System.out.println("============================");
-			System.out.println("| CRUD Servei:             |");
-			System.out.println("| 0. Exit                  |");
-			System.out.println("| 1. Inserir item          |");
-			System.out.println("| 2. Eliminar item         |");
-			System.out.println("| 3. Modificar item        |");
-			System.out.println("| 4. Llistar items         |");
-			System.out.println("============================");
-
-			scanner = new Scanner(System.in);
-			choice = (int) scanner.nextInt();
-
-			switch (choice) {
-			case 0:
-				System.out.println("Exiting...");
-				break;
-			case 1:
-				addServei();
-				break;
-			case 2:
-				deleteServei();
-				break;
-			case 3:
-				updateServei();
-				break;
-			case 4:
-				serveiList();
-				break;
-			default:
-				System.out.println("Invalid selection");
-				break;
-			}
-		} while (choice != 0);
-	}
-
-	private void addServei() {
-		scanner = new Scanner(System.in);
-
-		System.out.println("Entra el idTipus:");
-		int idTipus = (int) scanner.nextInt();
-		
-		scanner = new Scanner(System.in);
-		System.out.println("Entra la descripcio:");
-		String desc = (String) scanner.nextLine();
-			
-		Servei servei = new Servei(idTipus, desc);
-
-		try {
-			this.enquestaService.addServei(servei);
-			System.out.println("Servei succesfully added.");
-		} catch (MoroException ex) {
-			System.out.println("ERROR: " + ex.getMessage());
-			log.error("ERROR: " + ex.getMessage());
-		}
-		
-	}
-
-	private void deleteServei() {
-		//TODO mirar xq cony pete ! XD
-		serveiList();
-		scanner = new Scanner(System.in);
-
-		System.out.println("Entra el id del item que vols eliminar:");
-		int id = (int) scanner.nextInt();
-
-		try {
-			Servei servei = enquestaService.getServeiById(id);
-			if (servei == null) {
-				System.out.println("Servei with ID [" + id + "] not found");
-				log.error("Servei with ID [" + id + "] not found");
-				return;
-			}
-			System.out.println(servei);
-			enquestaService.deleteServei(id);
-			System.out.println("Servei with ID [" + id + "] deleted");
-		} catch (MoroException ex) {
-			System.out.println("ERROR: " + ex.getMessage());
-			log.error("ERROR: " + ex.getMessage());
-		}
-	}
-
-	private void updateServei() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	private void crudParametre() {
-		int choice;
-		do {
-			System.out.println("============================");
-			System.out.println("|      MORO EXERCISER      |");
-			System.out.println("============================");
-			System.out.println("| CRUD Parametre:          |");
-			System.out.println("| 0. Exit                  |");
-			System.out.println("| 1. Inserir item          |");
-			System.out.println("| 2. Eliminar item         |");
-			System.out.println("| 3. Modificar item        |");
-			System.out.println("| 4. Llistar items         |");
-			System.out.println("============================");
-
-			scanner = new Scanner(System.in);
-			choice = (int) scanner.nextInt();
-
-			switch (choice) {
-			case 0:
-				System.out.println("Exiting...");
-				break;
-			case 1:
-				addParametre();
-				break;
-			case 2:
-				deleteParametre();
-				break;
-			case 3:
-				updateParametre();
-				break;
-			case 4:
-				parametreList();
-				break;
-			default:
-				System.out.println("Invalid selection");
-				break;
-			}
-		} while (choice != 0);
-	}
-		
-	private void addParametre() {
-		scanner = new Scanner(System.in);
-
-		System.out.println("Entra el idTipus:");
-		int preu = (int) scanner.nextInt();
-		
-		scanner = new Scanner(System.in);
-		System.out.println("Entra la descripcio:");
-		String desc = (String) scanner.nextLine();
-			
-		Parametre parametre = new Parametre(preu, desc);
-
-		try {
-			this.enquestaService.addParametre(parametre);
-			System.out.println("Parametre succesfully added.");
-			log.info("Parametre succesfully added.");
-		} catch (MoroException ex) {
-			System.out.println("ERROR: " + ex.getMessage());
-			log.error("ERROR: " + ex.getMessage());
-		}
-	}
-
-	private void deleteParametre() {
-		parametreList();
-		scanner = new Scanner(System.in);
-
-		System.out.println("Entra el id del item que vols eliminar:");
-		int id = (int) scanner.nextInt();
-
-		try {
-			Parametre parametre = enquestaService.getParametreById(id);
-			if (parametre == null) {
-				System.out.println("Parametre with ID [" + id + "] not found");
-				log.error("Parametre with ID [" + id + "] not found");
-				return;
-			}
-			enquestaService.deleteParametre(id);
-			System.out.println("Parametre with ID [" + id + "] deleted");
-			log.info("Parametre with ID [" + id + "] deleted");
-		} catch (MoroException ex) {
-			System.out.println("ERROR: " + ex.getMessage());
-			log.error("ERROR: " + ex.getMessage());
-		}
-	}
-
+	
 	private void updateParametre() {
 		parametreList();
 		scanner = new Scanner(System.in);
@@ -644,224 +828,29 @@ public class MinimumExerciser {
 			log.error("ERROR updating Dossier: " + ex.getMessage());
 		}
 	}
-
-	private void crudValoracio() {
-		int choice;
-		do {
-			System.out.println("============================");
-			System.out.println("|      MORO EXERCISER      |");
-			System.out.println("============================");
-			System.out.println("| CRUD Valoracio:          |");
-			System.out.println("| 0. Exit                  |");
-			System.out.println("| 1. Inserir item          |");
-			System.out.println("| 2. Eliminar item         |");
-			System.out.println("| 3. Modificar item        |");
-			System.out.println("| 4. Llistar items         |");
-			System.out.println("============================");
-
-			scanner = new Scanner(System.in);
-			choice = (int) scanner.nextInt();
-
-			switch (choice) {
-			case 0:
-				System.out.println("Exiting...");
-				break;
-			case 1:
-				addValoracio();
-				break;
-			case 2:
-				deleteValoracio();
-				break;
-			case 3:
-				updateValoracio();
-				break;
-			case 4:
-				valoracioList();
-				break;
-			default:
-				System.out.println("Invalid selection");
-				break;
-			}
-		} while (choice != 0);
-	}
 	
-	private void addValoracio() {
-		scanner = new Scanner(System.in);
-
-		System.out.println("Entra el idDossier:");
-		int idDossier = (int) scanner.nextInt();
-		Dossier dossier = null;
-		try {
-			dossier = enquestaService.getDossierById(idDossier);
-		} catch (Exception e) {
-			System.out.println("Error while looking at Dossier with id: " + idDossier);
-			log.error("Error while looking at Dossier with id: " + idDossier);
-			return;
-		}
-		
-		System.out.println("Entra el idServei:");
-		int idServei = (int) scanner.nextInt();
-		Servei servei = null;
-		try {
-			servei = enquestaService.getServeiById(idServei);
-		} catch (Exception e) {
-			System.out.println("Error while looking at Servei with id: " + idServei);
-			log.error("Error while looking at Servei with id: " + idServei);
-			return;
-		}
-		
-		System.out.println("Entra el idParam:");
-		int idParam = (int) scanner.nextInt();
-		Parametre parametre = null;
-		try {
-			parametre = enquestaService.getParametreById(idParam);
-		} catch (Exception e) {
-			System.out.println("Error while looking at Parametre with id: " + idParam);
-			log.error("Error while looking at Parametre with id: " + idParam);
-			return;
-		}
-		
-		System.out.println("Entra el valor:");
-		int valor = (int) scanner.nextInt();
-		
-		Valoracio valoracio = new Valoracio(dossier, servei, parametre, valor);
-
-		try {
-			this.enquestaService.addValoracio(valoracio);
-			System.out.println("Valoracio succesfully added.");
-			log.info("Valoracio succesfully added.");
-		} catch (MoroException ex) {
-			System.out.println("ERROR: " + ex.getMessage());
-			log.error("ERROR: " + ex.getMessage());
-		}
-		
-	}
-
-	private void deleteValoracio() {
+	private void updateServei() {
 		// TODO Auto-generated method stub
 		
 	}
-
+	
 	private void updateValoracio() {
 		// TODO Auto-generated method stub
 		
 	}
-
-	private void menuList() {
-		int choice;
-		do {
-			System.out.println("============================");
-			System.out.println("|      MORO EXERCISER      |");
-			System.out.println("============================");
-			System.out.println("| Llistats:                |");
-			System.out.println("| 0. Exit                  |");
-			System.out.println("| 1. ServeiDossier         |");
-			System.out.println("| 2. ValoracioServei       |");
-			System.out.println("| 3. ValoracioParametre    |");
-			System.out.println("============================");
-
-			scanner = new Scanner(System.in);
-			choice = (int) scanner.nextInt();
-
-			switch (choice) {
-			case 0:
-				System.out.println("Exiting...");
-				break;
-			case 1:
-				serveisDossierList();
-				break;
-			case 2:
-				valoracioServeiList();
-				break;
-			case 3:
-				valoracioParametreList();
-				break;
-			default:
-				System.out.println("Invalid selection");
-				break;
-			}
-		} while (choice != 0);
-	}
-	
-	private void serveisDossierList() {
-		dossierList();
-		
-		scanner = new Scanner(System.in);
-		System.out.println("De quin Dossier vols llistar els serveis ?(entrar idDossier)");
-		int id = (int) scanner.nextInt();
-		
-		try {
-			ActivitatDossier[] a = this.enquestaService.getServeisDossierList(id);
-			for (int i = 0; i < a.length; i++) {
-				System.out.println(a[i].getIdServei());
-			}
-		} catch (Exception ex) {
-			System.out.println("EJB access to getActivitatDossierList failed. Reason: " + ex.getMessage());
-			log.error("EJB access to getActivitatDossierList failed. Reason: " + ex.getMessage());
-		}
-		
-	}
-	
-	private void dossierList() {
-		try {
-			Dossier[] dossiers = this.enquestaService.getDossierList();
-			for (int i = 0; i < dossiers.length; i++) {
-				System.out.println(dossiers[i].toString());
-			}
-		} catch (Exception ex) {
-			System.out.println("EJB access to getActivitatDossierList failed. Reason: " + ex.getMessage());
-			log.error("EJB access to getActivitatDossierList failed. Reason: " + ex.getMessage());
-		}
-		
-	}
-	
-	private void serveiList(){
-		try {
-			Servei[] serveis = this.enquestaService.getServeiList();
-			for (int i = 0; i < serveis.length; i++) {
-				System.out.println(serveis[i].toString());
-			}
-		} catch (Exception ex) {
-			System.out.println("EJB access to getActivitatDossierList failed. Reason: " + ex.getMessage());
-			log.error("EJB access to getActivitatDossierList failed. Reason: " + ex.getMessage());
-		}
-	}
 	
 	private void valoracioList() {
-		// TODO Auto-generated method stub
-		
-	}
-	
-	private void parametreList(){
 		try {
-			Parametre[] parametres = this.enquestaService.getParametreList();
-			for (int i = 0; i < parametres.length; i++) {
-				System.out.println(parametres[i].toString());
-			}
-		} catch (Exception ex) {
-			System.out.println("EJB access to getParametreList failed. Reason: " + ex.getMessage());
-			log.error("EJB access to getParametreList failed. Reason: " + ex.getMessage());
-		}
-	}
-	
-	private void valoracioServeiList() {
-		serveiList();
-		
-		scanner = new Scanner(System.in);
-		System.out.println("Entra el id del Servei que vulguis llistar les valoracions:");
-		int idServei = (int) scanner.nextInt();
-		
-		try {
-			Valoracio[] valoracions = this.enquestaService.getValoracioServei(idServei);
+			Valoracio[] valoracions = this.enquestaService.getValoracioList();
 			for (int i = 0; i < valoracions.length; i++) {
 				System.out.println(valoracions[i].toString());
 			}
 		} catch (Exception ex) {
-			System.out.println("EJB access to getValoracioServeiList failed. Reason: " + ex.getMessage());
-			log.error("EJB access to getValoracioServeiList failed. Reason: " + ex.getMessage());
+			System.out.println("EJB access to getValoracioList failed. Reason: " + ex.getMessage());
+			log.error("EJB access to getValoracioList failed. Reason: " + ex.getMessage());
 		}	
 	}
-
+	
 	private void valoracioParametreList() {
 		parametreList();
 		
@@ -878,5 +867,23 @@ public class MinimumExerciser {
 			System.out.println("EJB access to getValoracioParametreList failed. Reason: " + ex.getMessage());
 			log.error("EJB access to getValoracioParametreList failed. Reason: " + ex.getMessage());
 		}
+	}
+
+	private void valoracioServeiList() {
+		serveiList();
+		
+		scanner = new Scanner(System.in);
+		System.out.println("Entra el id del Servei que vulguis llistar les valoracions:");
+		int idServei = (int) scanner.nextInt();
+		
+		try {
+			Valoracio[] valoracions = this.enquestaService.getValoracioServei(idServei);
+			for (int i = 0; i < valoracions.length; i++) {
+				System.out.println(valoracions[i].toString());
+			}
+		} catch (Exception ex) {
+			System.out.println("EJB access to getValoracioServeiList failed. Reason: " + ex.getMessage());
+			log.error("EJB access to getValoracioServeiList failed. Reason: " + ex.getMessage());
+		}	
 	}
 }

@@ -1,10 +1,10 @@
-13-11-2015 13:23:18,926 [main] (MinimumExerciser) INFO  MoroExerciser  - EXERCISER STARTS HERE
-13-11-2015 13:23:18,945 [main] (MinimumExerciser) INFO  MoroExerciser  - InitialContext created
-13-11-2015 13:23:19,023 [main] (MinimumExerciser) INFO  MoroExerciser  - About to look up EnquestesServiceRemote. JNDI name = [ejb:/Moro//EnquestesServiceBean!ad.uda.moro.ejb.session.EnquestesServiceRemote]
-13-11-2015 13:23:19,318 [main] (MinimumExerciser) INFO  MoroExerciser  - Look up EnquestesServiceRemote succeeded
-13-11-2015 13:28:20,701 [main] (MinimumExerciser) INFO  MoroExerciser  - EXERCISER STARTS HERE
-13-11-2015 13:28:20,706 [main] (MinimumExerciser) INFO  MoroExerciser  - InitialContext created
-13-11-2015 13:28:20,779 [main] (MinimumExerciser) INFO  MoroExerciser  - About to look up EnquestesServiceRemote. JNDI name = [ejb:/Moro//EnquestesServiceBean!ad.uda.moro.ejb.session.EnquestesServiceRemote]
-13-11-2015 13:28:20,886 [main] (MinimumExerciser) INFO  MoroExerciser  - Look up EnquestesServiceRemote succeeded
-13-11-2015 13:28:52,323 [main] (MinimumExerciser) INFO  MoroExerciser  - Dossier with ID [4] deleted
-13-11-2015 13:29:37,604 [main] (MinimumExerciser) INFO  MoroExerciser  - Dossier succesfully added.
+17-11-2015 09:51:55,208 [main] (MinimumExerciser) INFO  MoroExerciser  - EXERCISER STARTS HERE
+17-11-2015 09:51:55,219 [main] (MinimumExerciser) INFO  MoroExerciser  - InitialContext created
+17-11-2015 09:51:55,221 [main] (MinimumExerciser) INFO  MoroExerciser  - About to look up EnquestesServiceRemote. JNDI name = [ejb:/Moro//EnquestesServiceBean!ad.uda.moro.ejb.session.EnquestesServiceRemote]
+17-11-2015 09:51:55,496 [main] (MinimumExerciser) INFO  MoroExerciser  - Look up EnquestesServiceRemote succeeded
+17-11-2015 09:52:33,826 [main] (MinimumExerciser) INFO  MoroExerciser  - EXERCISER ENDS HERE
+17-11-2015 10:18:29,880 [main] (MinimumExerciser) INFO  MoroExerciser  - EXERCISER STARTS HERE
+17-11-2015 10:18:29,886 [main] (MinimumExerciser) INFO  MoroExerciser  - InitialContext created
+17-11-2015 10:18:29,888 [main] (MinimumExerciser) INFO  MoroExerciser  - About to look up EnquestesServiceRemote. JNDI name = [ejb:/Moro//EnquestesServiceBean!ad.uda.moro.ejb.session.EnquestesServiceRemote]
+17-11-2015 10:18:29,978 [main] (MinimumExerciser) INFO  MoroExerciser  - Look up EnquestesServiceRemote succeeded
+17-11-2015 10:18:55,589 [main] (MinimumExerciser) INFO  MoroExerciser  - EXERCISER ENDS HERE
